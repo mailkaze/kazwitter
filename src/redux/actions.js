@@ -10,9 +10,15 @@ export function setShowLogin() {
   }
 }
 
-export function setUserId(userId) {
+export function setUser(user) {
   return {
-    type: 'SET_USER_ID',
-    payload: userId
+    type: 'SET_USER',
+    payload: user
+  }
+}
+
+export function setShowNewPost() {
+  return {
+    type: 'SET_SHOW_NEW_POST',
   }
 }

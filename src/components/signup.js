@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { useDispatch } from 'react-redux'
 import { setShowSignup } from '../redux/actions'
 
@@ -24,9 +24,13 @@ export default function Signup() {
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
   const [error, setError] = useState(false)
+  const [username, setUsername] = useState('')
 
   function onChange(e) {
     switch (e.target.id) {
+      case 'username':
+        setUsername(e.target.value)
+        break
       case 'email':
         setEmail(e.target.value)
         break
@@ -40,17 +44,24 @@ export default function Signup() {
     }
   }
 
-  function onSubmit(e) {
+   function onSubmit (e) {
     e.preventDefault()
     if (password1 === password2) {
     auth.createUserWithEmailAndPassword(email, password1)
-    .then(userCredential => {
-        setError(false) 
-        setEmail('')
-        setPassword1('')
-        setPassword2('')
-        dispatch(setShowSignup())
-        console.log('sign up with userCredential: ', userCredential.uid)
+    .then( async userCredential => {
+      setError(false) 
+      setEmail('')
+      setPassword1('')
+      setPassword2('')
+      dispatch(setShowSignup())
+      const newUser = {
+        username: username,
+        registered: Date.now(),
+        avatar: '',
+        following: [userCredential.user.uid]
+      }
+      await db.collection('users').doc(userCredential.user.uid).set(newUser)
+      console.log('sign up with userCredential: ', userCredential.user.uid)
     })
     } else {
       setError(true)
@@ -61,6 +72,15 @@ export default function Signup() {
     <SignupStyled>
       <h5>Sign In Form:</h5>
       <form onSubmit={onSubmit} >
+        <input 
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Username ..."
+          onChange={onChange}
+          value={username}
+          required 
+        />
         <input 
           type="email" 
           name="email" 

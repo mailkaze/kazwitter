@@ -14,7 +14,7 @@ const NavbarStyled = styled.nav`
 `
 
 export default function Navbar() {
-  const userId = useSelector(state => state.userId)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   function logOut() {
@@ -28,10 +28,10 @@ export default function Navbar() {
   return (
     <NavbarStyled>
       <ul>
-        { userId === null && <li onClick={() => dispatch(setShowSignup())}>Sign up</li> }
-        { userId === null && <li onClick={() => dispatch(setShowLogin())}>Log in</li> }
-        { userId !== null && <li onClick={logOut}>Log out</li> }
-        { userId !== null && <li>Settings</li> }
+        { user === null && <li onClick={() => dispatch(setShowSignup())}>Sign up</li> }
+        { user === null && <li onClick={() => dispatch(setShowLogin())}>Log in</li> }
+        { user !== null && <li onClick={logOut}>Log out</li> }
+        { user !== null && <li>Settings</li> }
       </ul>
     </NavbarStyled>
   )
