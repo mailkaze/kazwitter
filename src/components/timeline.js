@@ -4,7 +4,7 @@ import { db } from '../firebase'
 import { useSelector } from 'react-redux'
 
 const TimelineStyled = styled.div`
-
+  
 `
 
 export default function Timeline() {
@@ -12,8 +12,9 @@ export default function Timeline() {
   const [posts, setPosts] = useState([])
 
   function getPosts() {
+    setPosts([])
     user.following.forEach( followed => {
-       db.collection("posts").where("userId", "==", followed).get()
+      db.collection("posts").where("userId", "==", followed).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const data = doc.data();
@@ -29,8 +30,8 @@ export default function Timeline() {
 
   return (
     <TimelineStyled>
+      <p onClick={getPosts} >Reload</p>
       {
-        //de momento solo mostramos los post propios
         posts.map(post => <p>ID: {post.id} <br /> Data: {post.data} </p> )
       }
     </TimelineStyled>

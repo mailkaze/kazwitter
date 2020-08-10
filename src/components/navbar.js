@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { auth } from '../firebase'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowSignup, setShowLogin } from '../redux/actions'
+import { setShowSignup, setShowLogin, setUser } from '../redux/actions'
 
 const NavbarStyled = styled.nav`
   li {
@@ -21,6 +21,7 @@ export default function Navbar() {
     if (window.confirm('Are you sure you want to log out?')){
       auth.signOut()
       .then(() => {
+        dispatch(setUser(null))
         console.log('sign out')
       })
     }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { auth, db } from '../firebase'
 import { useDispatch } from 'react-redux'
-import { setShowSignup } from '../redux/actions'
+import { setShowSignup, setUser } from '../redux/actions'
 
 const SignupStyled = styled.div`
   border: 1px solid black;
@@ -61,7 +61,7 @@ export default function Signup() {
         following: [userCredential.user.uid]
       }
       await db.collection('users').doc(userCredential.user.uid).set(newUser)
-      console.log('sign up with userCredential: ', userCredential.user.uid)
+      dispatch(setUser({...newUser, uid: userCredential.user.ui}))
     })
     } else {
       setError(true)

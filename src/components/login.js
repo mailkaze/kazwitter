@@ -43,7 +43,7 @@ export default function Login() {
       db.collection('users').doc(userCredential.user.uid).get()
       .then(function(doc) {
         if (doc.exists) {
-          dispatch(setUser(doc.data()))
+          dispatch(setUser({...doc.data(), uid: userCredential.user.uid}))
         }
       })
     })
