@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { db, auth } from '../firebase'
+import { auth } from '../firebase'
 import { useDispatch } from 'react-redux'
-import { setShowLogin, setUser } from '../redux/actions'
+import { setShowLogin } from '../redux/actions'
 
 const LoginStyled = styled.div`
   border: 1px solid black;
@@ -40,12 +40,6 @@ export default function Login() {
     auth.signInWithEmailAndPassword(email, password)
     .then(async userCredential => {
       dispatch(setShowLogin())
-      db.collection('users').doc(userCredential.user.uid).get()
-      .then(function(doc) {
-        if (doc.exists) {
-          dispatch(setUser({...doc.data(), uid: userCredential.user.uid}))
-        }
-      })
     })
   }
 

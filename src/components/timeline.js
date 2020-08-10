@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { db } from '../firebase'
 import { useSelector } from 'react-redux'
+import Post from './post'
 
 const TimelineStyled = styled.div`
   
@@ -16,9 +17,24 @@ export default function Timeline() {
     user.following.forEach( followed => {
       db.collection("posts").where("userId", "==", followed).get()
       .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach( async function(doc) {
           const data = doc.data();
-          setPosts(posts => [...posts, {id: doc.id, data: data.content}])
+          // Aquí recogerá el avatar del usuario cuando los haya
+          // falta recolectar likes, retweets, si es respuesta y respuestas cuando los haya
+          let author = {}
+          await db.collection('users').doc(data.userId).get()
+          .then(function(userData) {
+            author = userData.data()
+            console.log(author.username)
+          })
+          const postData = {
+            id: doc.id,
+            author: author.username,
+            authorId: data.userId,
+            content: data.content,
+            date: data.date
+          }
+          setPosts(posts => [...posts, postData])
         });
       })    
     })
@@ -32,7 +48,16 @@ export default function Timeline() {
     <TimelineStyled>
       <p onClick={getPosts} >Reload</p>
       {
-        posts.map(post => <p>ID: {post.id} <br /> Data: {post.data} </p> )
+        posts.map(post => (
+          <Post 
+            key={post.id}
+            id={post.id}
+            author={post.author}
+            content={post.content}
+            date={post.date}
+            authorId={post.authorId}
+          />
+        ))
       }
     </TimelineStyled>
   )
