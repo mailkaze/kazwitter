@@ -22,3 +22,9 @@ export function setShowNewPost() {
     type: 'SET_SHOW_NEW_POST',
   }
 }
+
+export function setShowSearch() {
+  return {
+    type: 'SET_SHOW_SEARCH',
+  }
+}

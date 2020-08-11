@@ -5,21 +5,44 @@ import { setShowNewPost } from '../redux/actions'
 import { db } from '../firebase'
 
 const NewPostStyled = styled.div`
-  float: left;
-  border: 1px solid black;
-  padding: 8px;
-  span {
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
+  padding: 12px 20px;
+  position: relative;
+  i {
+    position: absolute;
+    top: 12px;
+    right: 20px;
     cursor: pointer;
-    display: block;
   }
   form {
+    margin: auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    width: 80%;
+  }
+  h3 {
+    margin: 0;
+  }
+  textarea {
+    height: 6em;
+    margin: 7px 0;
+    border-style: none;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 8px 14px;
   }
   input {
-    margin-top: 5px;
-    padding: 5px 10px
+    border-style: none;
+    background: #0097e6;
+    color: white;
+    padding: 12px 0;
+    border-radius: 3px;
+    cursor: pointer;
   }
 `
 
@@ -46,10 +69,10 @@ export default function NewPost() {
   
   return (
     <NewPostStyled>
-      <h3>New post:</h3>
+      <i className="fas fa-times" onClick={() => dispatch(setShowNewPost())}></i>
       <form onSubmit={handleSubmit}>
-        <span onClick={() => dispatch(setShowNewPost())}>Cerrar</span>
-        <textarea name="content" id="content" cols="30" rows="10" required 
+        <h3>New post:</h3>
+        <textarea name="content" id="content" required 
           placeholder="¿Qué estás pensando?" onChange={handleChange}
           value={content} ></textarea>
         <input type="submit" value="Enviar"/>

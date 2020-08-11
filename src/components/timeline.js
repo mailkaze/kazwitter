@@ -5,7 +5,18 @@ import { useSelector } from 'react-redux'
 import Post from './post'
 
 const TimelineStyled = styled.div`
-  
+  .fa-redo-alt {
+    display: block;
+    text-align: center;
+    margin: auto;
+    color: #0097e6;
+    padding: 10px;
+    font-size: 1.4em;
+    cursor: pointer;
+  }
+  .fa-redo-alt:hover {
+    color: #00a8ff;
+  }
 `
 
 export default function Timeline() {
@@ -25,7 +36,6 @@ export default function Timeline() {
           await db.collection('users').doc(data.userId).get()
           .then(function(userData) {
             author = userData.data()
-            console.log(author.username)
           })
           const postData = {
             id: doc.id,
@@ -46,9 +56,11 @@ export default function Timeline() {
 
   return (
     <TimelineStyled>
-      <p onClick={getPosts} >Reload</p>
+      <i className="fas fa-redo-alt" onClick={getPosts} ></i>
       {
-        posts.map(post => (
+        posts
+        .sort((a, b) => b.date - a.date) // orden descendente por fecha
+        .map(post => (
           <Post 
             key={post.id}
             id={post.id}

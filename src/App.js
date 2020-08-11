@@ -8,17 +8,19 @@ import NewPost from './components/newPost';
 import Timeline from './components/timeline';
 import { auth, db } from './firebase'
 import { setUser } from './redux/actions'
+import SearchField from './components/searchField';
 
 function App() {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const showSignup = useSelector(state => state.showSignup)
   const showLogin = useSelector(state => state.showLogin)
+  const showSearch = useSelector(state => state.showSearch)
   const showNewPost = useSelector(state => state.showNewPost)
   
   useEffect(() => {
     auth.onAuthStateChanged(function(userCredential) {
-      console.log('se activó el evento de cambio de usuario con esto:', userCredential)
+      console.log('Usuario actual:', userCredential)
       if (userCredential != null) {
         db.collection('users').doc(userCredential.uid).get()
         .then(function(doc) {
@@ -35,13 +37,13 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      { !showNewPost && user !== null && <AddButton /> }
       { showNewPost && user !== null && <NewPost /> }
       { showSignup && <Signup /> }
       { showLogin && <Login /> }
-      { user === null && <p>Log in for read an write Kazweets!</p> }
+      { user === null && <p className="no-user">Log in for read an write Kazweets!</p> }
       { user !== null && <Timeline /> }
-      
+      { !showNewPost && user !== null && <AddButton /> }
+      { showSearch && <SearchField />}
     </div>
   );
 }

@@ -2,13 +2,31 @@ import React from 'react'
 import styled from 'styled-components'
 import { auth } from '../firebase'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowSignup, setShowLogin } from '../redux/actions'
+import { setShowSignup, setShowLogin, setShowSearch } from '../redux/actions'
 
 const NavbarStyled = styled.nav`
+  background: #0097e6;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .fa-twitter {
+    margin-left: 16px;
+    font-size: 2em;
+  }
+  ul {
+    margin: 0;
+    padding: 20px;
+  }
   li {
     list-style: none;
     display: inline-block;
     margin: 0 5px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  fa-search {
+    margin-right:3px;
     cursor: pointer;
   }
 `
@@ -40,7 +58,9 @@ export default function Navbar() {
 
   return (
     <NavbarStyled>
+      <i className="fab fa-twitter"></i>
       <ul>
+        { user !== null && <i className="fas fa-search" onClick={() => dispatch(setShowSearch())}></i>}
         { user === null && <li onClick={onClickSignUp}>Sign up</li> }
         { user === null && <li onClick={onClickLogin}>Log in</li> }
         { user !== null && <li onClick={logOut}>Log out</li> }

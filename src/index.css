@@ -1,0 +1,23 @@
+html {
+  font-family: 'Roboto', sans-serif;
+  background: #e8e9ec;
+  color: #2f3640;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+.no-user {
+  color: #7f8fa6;
+  text-align: center;
+  width: 40%;
+  margin: auto;
+  padding-top: 60px;
+  font-size: 1.3em;
+  font-style: italic;
+}

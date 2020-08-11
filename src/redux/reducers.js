@@ -8,6 +8,8 @@ export default function reducer(state, action) {
       return {...state, user: action.payload}
     case 'SET_SHOW_NEW_POST':
       return {...state, showNewPost: !state.showNewPost}
+    case 'SET_SHOW_SEARCH':
+      return {...state, showSearch: !state.showSearch}
     default:
       return state
   }

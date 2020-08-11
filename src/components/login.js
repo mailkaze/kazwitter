@@ -5,16 +5,45 @@ import { useDispatch } from 'react-redux'
 import { setShowLogin } from '../redux/actions'
 
 const LoginStyled = styled.div`
-  border: 1px solid black;
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
+  padding: 12px 20px;
+  position: relative;
+  i {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    cursor: pointer;
+  }
+  form {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
   h5 {
-    margin: 5px
+    margin: 0;
   }
-  form > * {
-    display: block;
-    margin: 5px;
+  input {
+    height: 1.8em;
+    margin-top: 7px;
+    border-style: none;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 8px 14px;
   }
-  p {
-    color: red;
+  button {
+    border-style: none;
+    background: #0097e6;
+    color: white;
+    padding: 12px 0;
+    margin-top: 7px;
+    border-radius: 3px;
+    cursor: pointer;
   }
 `
 
@@ -45,8 +74,9 @@ export default function Login() {
 
   return (
     <LoginStyled>
-      <h5>Log in:</h5>
+      <i className="fas fa-times" onClick={() => dispatch(setShowLogin())} ></i>
       <form onSubmit={onSubmit} >
+      <h5>Log in:</h5>
         <input 
           type="email" 
           name="email" 
