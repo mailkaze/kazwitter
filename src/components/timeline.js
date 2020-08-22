@@ -21,38 +21,70 @@ const TimelineStyled = styled.div`
 
 export default function Timeline() {
   const user = useSelector(state => state.user)
+  const search = useSelector(state => state.search)
   const [posts, setPosts] = useState([])
 
   function getPosts() {
     setPosts([])
-    user.following.forEach( followed => {
-      db.collection("posts").where("userId", "==", followed).get()
+
+    if (search !== '') {
+      /* Esta función es horriblemente ineficiente, pide todos los posts de la base de datos y los comprueba 
+      en local uno por uno, pero es que firebase no acepta búsquedas parciales en sus campos. */
+      db.collection("posts").get()
       .then(function(querySnapshot) {
         querySnapshot.forEach( async function(doc) {
           const data = doc.data();
-          // Aquí recogerá el avatar del usuario cuando los haya
-          // falta recolectar likes, retweets, si es respuesta y respuestas cuando los haya
           let author = {}
           await db.collection('users').doc(data.userId).get()
           .then(function(userData) {
             author = userData.data()
           })
-          const postData = {
-            id: doc.id,
-            author: author.username,
-            authorId: data.userId,
-            content: data.content,
-            date: data.date
+          if ( data.content.toLowerCase().includes(search.toLowerCase()) // busca en el contenido del post
+          || author.username.toLowerCase().includes(search.toLowerCase()) ) { // busca en el nombre del autor
+            const postData = {
+              id: doc.id,
+              author: author.username,
+              authorId: data.userId,
+              content: data.content,
+              date: data.date
+            }
+            setPosts(posts => [...posts, postData])
           }
-          setPosts(posts => [...posts, postData])
-        });
-      })    
-    })
+        })
+      })
+    } else {
+      user.following.forEach( followed => {
+        db.collection("posts").where("userId", "==", followed).get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach( async function(doc) {
+            const data = doc.data();
+            // Aquí recogerá el avatar del usuario cuando los haya
+            // falta recolectar likes, retweets, si es respuesta y respuestas cuando los haya
+            let author = {}
+            await db.collection('users').doc(data.userId).get()
+            .then(function(userData) {
+              author = userData.data()
+            })
+            const postData = {
+              id: doc.id,
+              author: author.username,
+              authorId: data.userId,
+              content: data.content,
+              date: data.date
+            }
+            setPosts(posts => [...posts, postData])
+          });
+        })    
+      })
+    }
+    
+
+    
   }
 
   useEffect(() => {
     getPosts()
-  }, [user])
+  }, [user, search])
 
   return (
     <TimelineStyled>

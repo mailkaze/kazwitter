@@ -28,3 +28,10 @@ export function setShowSearch() {
     type: 'SET_SHOW_SEARCH',
   }
 }
+
+export function setSearch(search) {
+  return {
+    type: 'SET_SEARCH',
+    payload: search
+  }
+}

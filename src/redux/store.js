@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   showNewPost: false,
   showSearch: false,
+  search: '',
 }
 
 export default createStore(reducer, initialState)

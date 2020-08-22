@@ -1,39 +1,72 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { setShowSearch } from '../redux/actions'
+import { setShowSearch, setSearch } from '../redux/actions'
 
 const SearchFieldStyled = styled.div`
   position: absolute;
   top: 40px;
   left: 4vw;
-  width: 80%;
+  width: 90%;
   margin: auto;
   margin-top: 10px;
   background: white;
   border-radius: 8px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
-  padding: 12px 20px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
   i {
     cursor: pointer;
+    font-size:1.2em;
+    margin-right: 8px;
   }
   input {
-    height: 1.8em;
-    margin-top: 7px;
-    border-style: none;
-    border: 1px solid grey;
-    border-radius: 3px;
-    padding: 8px 14px;
+    margin-left: 8px;
+    border: none;
+    width: 80%;
+    /* padding: 5px 8px 5px 8px; */
+    font-size: 1.4em;
+  }
+  input:focus{
+    outline: none;
   }
 `
 
 export default function SearchField() {
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState('')
+
+  function handleChange(e) {
+    setSearchTerm(e.target.value)
+  }
+
+  function handleKey(e) {
+    if (e.keyCode === 13) {
+      if (searchTerm !== '') {
+        dispatch(setSearch(searchTerm.trim()))
+      }
+    }
+  }
+
+  function handleClose() {
+    dispatch(setShowSearch())
+    setSearchTerm('')
+    dispatch(setSearch(''))
+  }
+
   return (
     <SearchFieldStyled>
-      <i className="fas fa-times" onClick={() => dispatch(setShowSearch())}></i>
-      <input type="text"/>
-      <i className="fas fa-search"></i>
+      <input type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        onKeyUp={handleKey}
+        autoFocus
+      />
+      <i className="fas fa-times" 
+        onClick={handleClose}
+      ></i>
     </SearchFieldStyled>
   )
 }
