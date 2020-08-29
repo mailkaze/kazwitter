@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { auth, storage } from '../firebase'
+import { auth } from '../firebase'
 import { useSelector, useDispatch } from 'react-redux'
 import { setShowSignup, setShowLogin, setShowSearch, setShowSettings } from '../redux/actions'
 

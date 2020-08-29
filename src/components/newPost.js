@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { setShowNewPost } from '../redux/actions'
-import { db } from '../firebase'
+import { db, storage } from '../firebase'
 
 const NewPostStyled = styled.div`
   width: 80%;
@@ -36,7 +36,7 @@ const NewPostStyled = styled.div`
     border-radius: 3px;
     padding: 8px 14px;
   }
-  input {
+  .button {
     border-style: none;
     background: #0097e6;
     color: white;
@@ -53,18 +53,33 @@ export default function NewPost() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    // TODO: ajustar hasImage a si hay o no hay imagen subida
     const post = {
       userId: user.uid,
       content: content,
+      hasImage: false,
       date: Date.now()
     }
-    console.log(post)
     await db.collection('posts').doc().set(post)
+    // TODO: pillar el último post del user y leer su ID
+    // TODO: nombrar la imagen con el ID del post y subirla así
     setContent('')
     dispatch(setShowNewPost())
   }
+
   function handleChange(e) {
     setContent(e.target.value)
+  }
+
+  function uploadPicture(e) {
+    // TODO: esta función tiene que dividirse en dos, una para guardar la imagen en memoria
+    // TODO: y otra para subirla con el ID del post al enviar el post
+    const storageRef = storage.ref()
+    const profilePicRef = storageRef.child(`${user.uid}.jpg`)
+    const file = e.target.files[0]
+    profilePicRef.put(file).then(function(snapshot) {
+      console.log('Uploaded a blob or file!');
+    });
   }
   
   return (
@@ -75,7 +90,9 @@ export default function NewPost() {
         <textarea name="content" id="content" required 
           placeholder="¿Qué estás pensando?" onChange={handleChange}
           value={content} ></textarea>
-        <input type="submit" value="Enviar"/>
+        <label htmlFor="uploadPic">add an image:</label>
+        <input type="file" name="uploadPic" id="uploadPic" multiple={false} onChange={uploadPicture} accept="image/*" />
+        <input type="submit" className="button" value="Enviar"/>
       </form>
     </NewPostStyled>
   )

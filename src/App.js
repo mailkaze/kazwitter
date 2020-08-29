@@ -27,7 +27,6 @@ function App() {
       pictureURL = url
     })
     .catch(function(error) {
-      console.log('entro en el catch y debería devolver el default picture')
       pictureURL = 'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg'
     })
     return pictureURL

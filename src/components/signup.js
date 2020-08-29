@@ -74,6 +74,7 @@ export default function Signup() {
   }
 
    function onSubmit (e) {
+    // TODO: hay que incluir la subida de imagen de perfil obligatoria
     e.preventDefault()
     if (password1 === password2) {
     auth.createUserWithEmailAndPassword(email, password1)

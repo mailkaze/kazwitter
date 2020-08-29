@@ -26,6 +26,7 @@ export default function Settings() {
   }
   return (
     <SettingsStyled>
+      <label htmlFor="uploadPic">Update your profile picture:</label>
       <input type="file" name="uploadPic" id="uploadPic" multiple={false} onChange={uploadPicture} accept="image/*" />
       <p>Change password</p>
     </SettingsStyled>
