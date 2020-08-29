@@ -12,6 +12,8 @@ export default function reducer(state, action) {
       return {...state, showSearch: !state.showSearch}
     case 'SET_SEARCH':
       return {...state, search: action.payload}
+    case 'SET_SHOW_SETTINGS':
+      return {...state, showSettings: !state.showSettings}
     default:
       return state
   }

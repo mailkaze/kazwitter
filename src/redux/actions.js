@@ -35,3 +35,9 @@ export function setSearch(search) {
     payload: search
   }
 }
+
+export function setShowSettings() {
+  return {
+    type: 'SET_SHOW_SETTINGS'
+  }
+}

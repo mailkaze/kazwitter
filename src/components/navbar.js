@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { auth } from '../firebase'
+import { auth, storage } from '../firebase'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowSignup, setShowLogin, setShowSearch } from '../redux/actions'
+import { setShowSignup, setShowLogin, setShowSearch, setShowSettings } from '../redux/actions'
 
 const NavbarStyled = styled.nav`
   background: #0097e6;
@@ -17,6 +17,8 @@ const NavbarStyled = styled.nav`
   ul {
     margin: 0;
     padding: 20px;
+    display: flex;
+    align-items: center;
   }
   li {
     list-style: none;
@@ -28,6 +30,12 @@ const NavbarStyled = styled.nav`
   fa-search {
     margin-right:3px;
     cursor: pointer;
+  }
+  img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid white;
   }
 `
 
@@ -56,6 +64,10 @@ export default function Navbar() {
     dispatch(setShowLogin())
   }
 
+  function onClickSettings() {
+    dispatch(setShowSettings())
+  }
+
   return (
     <NavbarStyled>
       <i className="fab fa-twitter"></i>
@@ -64,7 +76,7 @@ export default function Navbar() {
         { user === null && <li onClick={onClickSignUp}>Sign up</li> }
         { user === null && <li onClick={onClickLogin}>Log in</li> }
         { user !== null && <li onClick={logOut}>Log out</li> }
-        { user !== null && <li>Settings</li> }
+        { user !== null && <li onClick={onClickSettings}><img src={user.pictureURL} alt="Profile pic"/></li> }
       </ul>
     </NavbarStyled>
   )

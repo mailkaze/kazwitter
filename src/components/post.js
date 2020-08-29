@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser } from '../redux/actions'
+import { db } from '../firebase'
 
 const PostStyled = styled.div`
   width: 90%;
@@ -28,6 +30,9 @@ const PostStyled = styled.div`
     border-radius: 5px;
     box-shadow: 1px 1px 2px 1px rgba(0,0,0,.3);
   }
+  .option {
+    cursor: pointer;
+  }
   p {
     margin: 0;
   }
@@ -42,16 +47,34 @@ const PostStyled = styled.div`
 `
 
 export default function Post(props) {
+  const dispatch = useDispatch()
   const user = useSelector( state => state.user)
   const [showOptions, setShowOptions] = useState(false)
   const date = new Date(props.date)
+
+  function handleFollow() {
+    if (user.following.includes(props.authorId)) {
+      if (window.confirm(`Unfollow ${props.author}?`)) {
+        const following = user.following.filter(f => f !== props.authorId)
+        dispatch(setUser({...user, following: following}))
+      }
+      
+    } else {
+      dispatch(setUser({...user, following: [...user.following, props.authorId]}))
+    }
+  }
+
+  useEffect(() => {
+    db.collection('users').doc(user.uid).update({following: user.following})
+  }, [user])
+
   return (
     <PostStyled>
       <i className="fas fa-ellipsis-v" onClick={() => setShowOptions(!showOptions)}></i>
       {
         showOptions && (
           <div className="options">
-            <p className="option">
+            <p className="option" onClick={handleFollow}>
               {
                 user.uid !== props.authorId && (
                   user.following.includes(props.authorId) ? "Unfollow" : "Follow"
