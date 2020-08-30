@@ -46,6 +46,7 @@ export default function Timeline() {
               author: author.username,
               authorId: data.userId,
               content: data.content,
+              imageID: data.imageID,
               date: data.date
             }
             setPosts(posts => [...posts, postData])

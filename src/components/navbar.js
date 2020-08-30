@@ -27,7 +27,7 @@ const NavbarStyled = styled.nav`
     cursor: pointer;
     font-weight: 500;
   }
-  fa-search {
+  .fa-search {
     margin-right:3px;
     cursor: pointer;
   }
