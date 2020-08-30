@@ -34,7 +34,6 @@ function App() {
 
   useEffect(() => {
     auth.onAuthStateChanged(function(userCredential) {
-      console.log('Usuario actual:', userCredential)
       if (userCredential != null) {
         db.collection('users').doc(userCredential.uid).get()
         .then(async function(doc) {

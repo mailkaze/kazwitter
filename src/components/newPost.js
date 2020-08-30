@@ -37,6 +37,7 @@ const NewPostStyled = styled.div`
     padding: 8px 14px;
   }
   .button {
+    margin-top: 7px;
     border-style: none;
     background: #0097e6;
     color: white;
@@ -50,19 +51,19 @@ export default function NewPost() {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const [content, setContent] = useState('')
+  const [file, setFile] = useState('')
+  const fileID = Date.now()
 
   async function handleSubmit(e) {
     e.preventDefault()
-    // TODO: ajustar hasImage a si hay o no hay imagen subida
     const post = {
       userId: user.uid,
       content: content,
-      hasImage: false,
+      imageID: file !== '' ? fileID : '',
       date: Date.now()
     }
     await db.collection('posts').doc().set(post)
-    // TODO: pillar el último post del user y leer su ID
-    // TODO: nombrar la imagen con el ID del post y subirla así
+    if (file !== '') {uploadPicture()}
     setContent('')
     dispatch(setShowNewPost())
   }
@@ -71,12 +72,13 @@ export default function NewPost() {
     setContent(e.target.value)
   }
 
-  function uploadPicture(e) {
-    // TODO: esta función tiene que dividirse en dos, una para guardar la imagen en memoria
-    // TODO: y otra para subirla con el ID del post al enviar el post
+  function processImage(e) {
+    setFile(e.target.files[0])
+  }
+
+  function uploadPicture() {
     const storageRef = storage.ref()
-    const profilePicRef = storageRef.child(`${user.uid}.jpg`)
-    const file = e.target.files[0]
+    const profilePicRef = storageRef.child(`${fileID}.jpg`)
     profilePicRef.put(file).then(function(snapshot) {
       console.log('Uploaded a blob or file!');
     });
@@ -91,7 +93,7 @@ export default function NewPost() {
           placeholder="¿Qué estás pensando?" onChange={handleChange}
           value={content} ></textarea>
         <label htmlFor="uploadPic">add an image:</label>
-        <input type="file" name="uploadPic" id="uploadPic" multiple={false} onChange={uploadPicture} accept="image/*" />
+        <input type="file" name="uploadPic" id="uploadPic" multiple={false} onChange={processImage} accept="image/*" />
         <input type="submit" className="button" value="Enviar"/>
       </form>
     </NewPostStyled>

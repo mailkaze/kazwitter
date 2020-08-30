@@ -49,9 +49,13 @@ const PostStyled = styled.div`
   }
   .content {
     margin-left: 40px;
+    margin-bottom: 8px;
+  }
+  .image {
+    width: 100%;
+    border-radius: 5px;
   }
   .date {
-    margin-top: 8px;
     font-size: .7em;
     text-align: right;
   }
@@ -62,6 +66,7 @@ export default function Post(props) {
   const user = useSelector( state => state.user)
   const [showOptions, setShowOptions] = useState(false)
   const [profilePic, setProfilePic] = useState('https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg')
+  const [image, setImage] = useState('')
   const date = new Date(props.date)
 
   function handleFollow() {
@@ -87,9 +92,21 @@ export default function Post(props) {
     })
     setProfilePic(pictureURL)
   }
+
+  async function getImage() {
+    if (props.imageID !== '') {
+      let pathReference = storage.ref(`${props.imageID}.jpg`)
+      let imageURL = ''
+      await pathReference.getDownloadURL().then(function(url) {
+        imageURL = url
+      })
+      setImage(imageURL)
+    }
+  }
   
   useEffect(() => {
     getProfilePic()
+    getImage()
   }, [])
 
   return (
@@ -108,7 +125,7 @@ export default function Post(props) {
         <img src={profilePic} alt="profile pic" className="profile"/>
         {props.author}</p>
       <p className="content">{props.content}</p>
-      {/* TODO: { props.hasImage && <img src={getImage} alt=""/> } */}
+      { props.imageID && <img className="image" src={image} alt=""/> }
       <p className="date">{date.toLocaleString()}</p>
       {/* <p>Id: {props.id}</p> */}
     </PostStyled>

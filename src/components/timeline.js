@@ -58,7 +58,6 @@ export default function Timeline() {
         .then(function(querySnapshot) {
           querySnapshot.forEach( async function(doc) {
             const data = doc.data();
-            // Aquí recogerá el avatar del usuario cuando los haya
             // falta recolectar likes, retweets, si es respuesta y respuestas cuando los haya
             let author = {}
             await db.collection('users').doc(data.userId).get()
@@ -70,6 +69,7 @@ export default function Timeline() {
               author: author.username,
               authorId: data.userId,
               content: data.content,
+              imageID: data.imageID,
               date: data.date
             }
             setPosts(posts => [...posts, postData])
@@ -98,6 +98,7 @@ export default function Timeline() {
             id={post.id}
             author={post.author}
             content={post.content}
+            imageID={post.imageID}
             date={post.date}
             authorId={post.authorId}
           />
